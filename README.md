@@ -12,6 +12,4 @@ Architecture
 Usage
 -----
 
-To make things easy for myself, `life-driver` uses DrScheme's drawing toolkit.
-
-TODO: Write usage notes for `life-driver` once it's working.
+TODO: Write usage notes for `drscheme-driver` once it's working.
