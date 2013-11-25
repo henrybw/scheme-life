@@ -50,8 +50,5 @@
         0
         cells)
       ;; Base case: count number alive in this row
-      (foldr
-        (lambda (cell count) (if (eq? cell 1) (+ count 1) count))
-        0
-        cells)))
+      (length (filter (lambda (cell) (= cell 1)) cells))))
 
