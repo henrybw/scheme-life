@@ -13,7 +13,7 @@
   ;;   set state of cell based on neighbor count
   cells)
 
-;;; TODO: write comments
+;;; TODO: write this
 (define (neighbors x y cells)
   ;; TODO: apparently DrScheme doesn't have sublist?
   ;(sublist
@@ -41,7 +41,8 @@
         (if (or (= alive-neighbors 2) (= alive-neighbors 3)) 1 0)
         (if (= alive-neighbors 3) 1 0))))
 
-;; TODO: write comments
+;;; Counts the number of living cells in the given list of cells. The list
+;;; can either be one or multi-dimensional.
 (define (count-alive cells)
   (if (list? (car cells))
       ;; Recursive case: aggregate the number alive in each row
