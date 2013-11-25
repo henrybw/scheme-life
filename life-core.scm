@@ -1,23 +1,5 @@
 ;;;; Core logic for Conway's Game of Life
 
-(define (neighbors x y cells)
-  ;; TODO: implement this
-  0)
-
-;; TODO: fold this into count-alive?
-(define (alive-in-row row)
-  (foldr
-    (lambda (cell count) (if (eq? cell 1) (+ count 1) count))
-    0
-    row))
-
-;; TODO: write comments
-(define (count-alive cells)
-  (foldr
-    (lambda (row count) (+ (alive-in-row row) count))
-    0
-    cells))
-
 ;;; Evolves a generation according to the Game of Life rules:
 ;;;
 ;;; 1. Any live cell with fewer than two live neighbors dies, as if caused by
@@ -43,9 +25,21 @@
   ;;   set state of cell based on neighbor count
   cells)
 
-;; simple test
-;; TODO: remove this
-(count-alive '((1 0 0 0 1 0)
-               (0 0 1 0 1 0)
-               (1 0 0 0 1 1)
-               (0 1 1 0 0 0)))
+(define (neighbors x y cells)
+  ;; TODO: implement this
+  0)
+
+;; TODO: write comments
+(define (count-alive cells)
+  (foldr
+    (lambda (row count) (+ (alive-in-row row) count))
+    0
+    cells))
+
+;; TODO: fold this into count-alive?
+(define (alive-in-row row)
+  (foldr
+    (lambda (cell count) (if (eq? cell 1) (+ count 1) count))
+    0
+    row))
+
