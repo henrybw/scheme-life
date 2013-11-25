@@ -2,6 +2,10 @@
 ;;;; either 1 (alive) or 0 (dead), and the field is represented as a 2D list
 ;;;; of cells. The main function of interest to consumers is evolve, which will
 ;;;; transform a 2D list of cells based on the Game of Life evolution rules.
+;;;;
+;;;; N.B. For the sake of simplicity, this implementation assumes every cell
+;;;; outside of the field is dead.
+
 
 ;;; Evolves a generation according to the Game of Life rules. Returns the next
 ;;; generation as a 2D list of cells, with the same dimensions as the input list.
@@ -23,8 +27,8 @@
   ;    (min (+ x 1) (length cells)))
   cells)
 
-;;; Decides if the given cell should live, given a 2D grid
-;;; of its neighbors, according to the following rules:
+;;; Decides if the given cell should live, given a 2D grid of its neighbors,
+;;; according to the following rules:
 ;;;
 ;;; 1. Any live cell with fewer than two live neighbors dies, as if caused by
 ;;;    under-population.
