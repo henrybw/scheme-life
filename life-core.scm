@@ -1,6 +1,30 @@
-;;;; Core logic for Conway's Game of Life
+;;;; Implements core logic for Conway's Game of Life. Cells are represented as
+;;;; either 1 (alive) or 0 (dead), and the field is represented as a 2D list
+;;;; of cells. The main function of interest to consumers is evolve, which will
+;;;; transform a 2D list of cells based on the Game of Life evolution rules.
 
-;;; Evolves a generation according to the Game of Life rules:
+;;; Evolves a generation according to the Game of Life rules. Returns the next
+;;; generation as a 2D list of cells, with the same dimensions as the input list.
+(define (evolve cells)
+  ;; TODO:
+  ;; map over each cell:
+  ;;   get neighbors at x,y => ((* * *) (* * *))
+  ;;   count live neighbors
+  ;;   set state of cell based on neighbor count
+  cells)
+
+;;; TODO: write comments
+(define (neighbors x y cells)
+  ;; TODO: apparently DrScheme doesn't have sublist?
+  ;(sublist
+  ;  (sublist
+  ;    cells
+  ;    (max (- x 1) 0)
+  ;    (min (+ x 1) (length cells)))
+  cells)
+
+;;; Decides if the given cell should live, given a 2D grid
+;;; of its neighbors, according to the following rules:
 ;;;
 ;;; 1. Any live cell with fewer than two live neighbors dies, as if caused by
 ;;;    under-population.
@@ -10,36 +34,24 @@
 ;;;    overcrowding.
 ;;; 4. Any dead cell with exactly three live neighbors becomes a live cell, as
 ;;;    if by reproduction.
-;;;
-;;; Parameters:
-;;;    cells - 2D grid of cells, where 1's are live cells and 0's are dead cells
-;;;
-;;; Returns:
-;;;    The next generation as a 2D list of cells, with the same dimension as the
-;;;    input list.
-(define (evolve cells)
-  ;; TODO:
-  ;; map over each cell:
-  ;;   get neighbors at x,y => ((* * *) (* * *))
-  ;;   count live neighbors
-  ;;   set state of cell based on neighbor count
-  cells)
-
-(define (neighbors x y cells)
-  ;; TODO: implement this
-  0)
+(define (next-gen-cell cell neighbors)
+  (let
+    ((alive-neighbors (count-alive neighbors)))
+    (if (= cell 1)
+        (if (or (= alive-neighbors 2) (= alive-neighbors 3)) 1 0)
+        (if (= alive-neighbors 3) 1 0))))
 
 ;; TODO: write comments
 (define (count-alive cells)
-  (foldr
-    (lambda (row count) (+ (alive-in-row row) count))
-    0
-    cells))
-
-;; TODO: fold this into count-alive?
-(define (alive-in-row row)
-  (foldr
-    (lambda (cell count) (if (eq? cell 1) (+ count 1) count))
-    0
-    row))
+  (if (list? (car cells))
+      ;; Recursive case: aggregate the number alive in each row
+      (foldr
+        (lambda (row count) (+ (count-alive row) count))
+        0
+        cells)
+      ;; Base case: count number alive in this row
+      (foldr
+        (lambda (cell count) (if (eq? cell 1) (+ count 1) count))
+        0
+        cells)))
 
