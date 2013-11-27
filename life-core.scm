@@ -17,16 +17,6 @@
   ;;   set state of cell based on neighbor count
   cells)
 
-;;; TODO: write this
-(define (neighbors x y cells)
-  ;; TODO: apparently DrScheme doesn't have sublist?
-  ;(sublist
-  ;  (sublist
-  ;    cells
-  ;    (max (- x 1) 0)
-  ;    (min (+ x 1) (length cells)))
-  cells)
-
 ;;; Decides if the given cell should live, given a 2D grid of its neighbors,
 ;;; according to the following rules:
 ;;;
@@ -56,4 +46,23 @@
         cells)
       ;; Base case: count number alive in this row
       (length (filter (lambda (cell) (= cell 1)) cells))))
+
+(define (neighbors-of x y cells)
+  (slice
+    (map
+      (lambda (row)
+        (slice
+          row
+          (max (- x 1) 0)
+          (min (+ x 1) (length row))))
+      cells)
+    (max (- y 1) 0)
+    (min (+ y 1) (length cells))))
+
+(define (slice lst start end)
+  (if (= end 0)
+      (list (car lst))
+      (if (= start 0)
+          (cons (car lst) (slice (cdr lst) start (- end 1)))
+          (slice (cdr lst) (- start 1) (- end 1)))))
 
