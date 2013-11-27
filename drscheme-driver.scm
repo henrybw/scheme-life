@@ -1,18 +1,18 @@
 ;;;; Implements a DrScheme-based graphical driver on top of life-core
 (include "life-core.scm")
 
-;;; Displays the given field, represented as a 2D grid, in a human-friendly
+;;; Displays the given grid, represented as a 2D grid, in a human-friendly
 ;;; format.
-(define (display-2d field)
+(define (display-2d grid)
   (map
     (lambda (row) (display row) (newline))
-    field))
+    grid))
 
 ;;; TODO: move this into a unit testing file and replace this with a graphics
 ;;; driver that call evolve, etc.
 (define (simple-tests)
   (let
-    ((field '((1 0 0 0 1 0)
+    ((grid '((1 0 0 0 1 0)
               (0 0 1 0 1 0)
               (1 0 0 0 1 1)
               (0 1 1 0 0 0)))
@@ -25,10 +25,10 @@
      (passive-neighbors '((1 0 0)
                           (0 1)
                           (0 0 0))))
-    (display "field:") (newline)
-    (display-2d field)
+    (display "grid:") (newline)
+    (display-2d grid)
     (display "alive: ")
-    (display (count-alive field)) (newline)
+    (display (count-alive grid)) (newline)
     (newline)
 
     (display "neighbors-that-kill:") (newline)
@@ -60,6 +60,14 @@
     (display (next-gen-cell 0 passive-neighbors)) (newline)
     (newline)
 
-    (display-2d (neighbors-of 1 1 field))))
+    (display "cell at 2,2: ")
+    (display (get-cell 2 2 grid)) (newline)
+    (display "neighbors of 2,2:") (newline)
+    (display-2d (neighbors-of 2 2 grid))
+    (newline)
+
+    (display-2d grid)
+    (newline)
+    (display-2d (evolve grid))))
 
 (simple-tests)
