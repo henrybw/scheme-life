@@ -36,7 +36,6 @@
 ;;; 4. Any dead cell with exactly three live neighbors becomes a live cell, as
 ;;;    if by reproduction.
 (define (evolve-cell x y cells)
-  ;(display x) (display ",") (display y) (newline)
   (let
     ((cell (get-cell x y cells))
      (live-neighbors (count-alive (get-neighbors x y cells))))
@@ -82,11 +81,4 @@
         cells)
       ;; Base case: count number alive in this row
       (length (filter (lambda (cell) (= cell 1)) cells))))
-
-(define (slice lst start end)
-  (if (= end 0)
-      (list (if (null? lst) 0 (car lst)))  ; Assume out-of-range cells are 0 (dead)
-      (if (= start 0)
-          (cons (car lst) (slice (cdr lst) start (- end 1)))
-          (slice (cdr lst) (- start 1) (- end 1)))))
 
