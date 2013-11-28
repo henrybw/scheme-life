@@ -10,33 +10,19 @@
 ;;; Evolves a generation according to the Game of Life rules. Returns the next
 ;;; generation as a 2D list of cells, with the same dimensions as the input list.
 (define (evolve cells)
-  ;; TODO:
-  ;; map over each cell:
-  ;;   get neighbors at x,y => ((* * *) (* * *))
-  ;;   count live neighbors
-  ;;   set state of cell based on neighbor count
-  ;(let
-  ;  ((height (length cells))
-  ;   (width (length (car cells))))
-  ;  (map
-  ;    (lambda (row)
-  ;        ;(- (length row) width)  ; x
-  ;      )
-  ;    (map
-  ;      (lambda (cell)
-  ;      )))))
-  cells)
+  (evolve-cell-rows 0 cells cells))
 
-(define (get-cell x y cells)
-  (if (list? (car cells))
-      ; Find the correct row first
-      (if (= y 0)
-          (get-cell x y (car cells))
-          (get-cell x (- y 1) (cdr cells)))
-      ; This is the correct row, so now find the correct column
-      (if (= x 0)
-          (car cells)
-            (get-cell (- x 1) y (cdr cells)))))
+(define (evolve-cell-rows y cells remaining-rows)
+  (if (null? remaining-rows)
+      null
+      (cons (evolve-cells-in-row 0 y cells (car remaining-rows))
+            (evolve-cell-rows (+ y 1) cells (cdr remaining-rows)))))
+
+(define (evolve-cells-in-row x y cells remaining-in-row)
+  (if (null? remaining-in-row)
+      null
+      (cons (evolve-cell x y cells)
+            (evolve-cells-in-row (+ x 1) y cells (cdr remaining-in-row)))))
 
 ;;; Decides if the given cell should live, given a 2D grid of its neighbors,
 ;;; according to the following rules:
@@ -49,26 +35,28 @@
 ;;;    overcrowding.
 ;;; 4. Any dead cell with exactly three live neighbors becomes a live cell, as
 ;;;    if by reproduction.
-(define (next-gen-cell cell neighbors)
+(define (evolve-cell x y cells)
+  ;(display x) (display ",") (display y) (newline)
   (let
-    ((alive-neighbors (count-alive neighbors)))
+    ((cell (get-cell x y cells))
+     (live-neighbors (count-alive (get-neighbors x y cells))))
     (if (= cell 1)
-        (if (or (= alive-neighbors 2) (= alive-neighbors 3)) 1 0)
-        (if (= alive-neighbors 3) 1 0))))
+        (if (or (= live-neighbors 2) (= live-neighbors 3)) 1 0)
+        (if (= live-neighbors 3) 1 0))))
 
-;;; Counts the number of living cells in the given list of cells. The list
-;;; can either be one or multi-dimensional.
-(define (count-alive cells)
+(define (get-cell x y cells)
   (if (list? (car cells))
-      ;; Recursive case: aggregate the number alive in each row
-      (foldr
-        (lambda (row count) (+ (count-alive row) count))
-        0
-        cells)
-      ;; Base case: count number alive in this row
-      (length (filter (lambda (cell) (= cell 1)) cells))))
+      ; Find the correct row first
+      (if (= y 0)
+          (get-cell x y (car cells))
+          (get-cell x (- y 1) (cdr cells)))
+      ; This is the correct row, so now find the correct column
+      (if (= x 0)
+          (car cells)
+            (get-cell (- x 1) y (cdr cells)))))
 
-(define (neighbors-of x y cells)
+;;; TODO: Borked, fix this...
+(define (get-neighbors x y cells)
   (slice
     (map
       (lambda (row)
@@ -80,9 +68,22 @@
     (max (- y 1) 0)
     (min (+ y 1) (length cells))))
 
+;;; Counts the number of living cells in the given list of cells. The list
+;;; can either be one or multi-dimensional.
+(define (count-alive cells)
+  ;(display cells) (newline)
+  (if (list? (car cells))
+      ;; Recursive case: aggregate the number alive in each row
+      (foldr
+        (lambda (row count) (+ (count-alive row) count))
+        0
+        cells)
+      ;; Base case: count number alive in this row
+      (length (filter (lambda (cell) (= cell 1)) cells))))
+
 (define (slice lst start end)
   (if (= end 0)
-      (list (car lst))
+      (list (if (null? lst) 0 (car lst)))  ; Assume out-of-range cells are 0 (dead)
       (if (= start 0)
           (cons (car lst) (slice (cdr lst) start (- end 1)))
           (slice (cdr lst) (- start 1) (- end 1)))))
