@@ -46,11 +46,11 @@
 
 (define (get-cell x y cells)
   (if (list? (car cells))
-      ; Find the correct row first
+      ;; Find the correct row first
       (if (= y 0)
           (get-cell x y (car cells))
           (get-cell x (- y 1) (cdr cells)))
-      ; This is the correct row, so now find the correct column
+      ;; This is the correct row, so now find the correct column
       (if (= x 0)
           (car cells)
             (get-cell (- x 1) y (cdr cells)))))
