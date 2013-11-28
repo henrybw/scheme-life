@@ -47,26 +47,28 @@
 (define (get-cell x y cells)
   (if (list? (car cells))
       ;; Find the correct row first
-      (if (= y 0)
-          (get-cell x y (car cells))
-          (get-cell x (- y 1) (cdr cells)))
+      (if (or (< y 0) (>= y (length cells)))
+          0  ; Outside cell bounds, so assume dead
+          (if (= y 0)
+              (get-cell x y (car cells))
+              (get-cell x (- y 1) (cdr cells))))
       ;; This is the correct row, so now find the correct column
-      (if (= x 0)
-          (car cells)
-            (get-cell (- x 1) y (cdr cells)))))
+      (if (or (< x 0) (>= x (length cells)))
+          0  ; Outside cell bounds, so assume dead
+          (if (= x 0)
+              (car cells)
+              (get-cell (- x 1) y (cdr cells))))))
 
-;;; TODO: Borked, fix this...
 (define (get-neighbors x y cells)
-  (slice
-    (map
-      (lambda (row)
-        (slice
-          row
-          (max (- x 1) 0)
-          (min (+ x 1) (length row))))
-      cells)
-    (max (- y 1) 0)
-    (min (+ y 1) (length cells))))
+  (list
+    (list (get-cell (- x 1) (- y 1) cells)
+          (get-cell    x    (- y 1) cells)
+          (get-cell (+ x 1) (- y 1) cells))
+    (list (get-cell (- x 1)    y    cells)
+          (get-cell (+ x 1)    y    cells))
+    (list (get-cell (- x 1) (+ y 1) cells)
+          (get-cell    x    (+ y 1) cells)
+          (get-cell (+ x 1) (+ y 1) cells))))
 
 ;;; Counts the number of living cells in the given list of cells. The list
 ;;; can either be one or multi-dimensional.
