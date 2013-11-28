@@ -72,7 +72,6 @@
 ;;; Counts the number of living cells in the given list of cells. The list
 ;;; can either be one or multi-dimensional.
 (define (count-alive cells)
-  ;(display cells) (newline)
   (if (list? (car cells))
       ;; Recursive case: aggregate the number alive in each row
       (foldr
