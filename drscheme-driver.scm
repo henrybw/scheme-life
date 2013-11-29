@@ -69,11 +69,14 @@
      (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
      (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)))
 
-(let* ((grid (glider-gun))
-       (frame (create-frame
-                grid
-                (length (car grid))
-                (length grid)
-                animate-grid
-                0.1)))
-  (send frame show #t))
+(define (game-of-life grid)
+  (send
+    (create-frame grid
+                  (length (car grid))
+                  (length grid)
+                  animate-grid
+                  0.1)
+    show #t))
+
+(game-of-life (glider))
+

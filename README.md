@@ -12,4 +12,7 @@ Architecture
 Usage
 -----
 
-TODO: Write usage notes for `drscheme-driver` once it's working.
+Open `drscheme-driver` in DrScheme/DrRacket, and run it. The main driver function is `game-of-life`.
+
+Under the hood, `drscheme-driver` invokes `life-core` by calling `evolve`, passing a 2D list of cells and getting an evolved version of the 2D list in return.
+
