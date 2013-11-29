@@ -66,6 +66,7 @@
               (get-cell    x    (- y 1) cells)
               (get-cell (+ x 1) (- y 1) cells))
         (list (get-cell (- x 1)    y    cells)
+              ;; This space intentionally left blank
               (get-cell (+ x 1)    y    cells))
         (list (get-cell (- x 1) (+ y 1) cells)
               (get-cell    x    (+ y 1) cells)
