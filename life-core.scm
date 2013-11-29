@@ -12,20 +12,27 @@
 (define (evolve cells)
   (evolve-cell-rows 0 cells cells))
 
-(define (evolve-cell-rows y cells remaining-rows)
+;;; Evolves each row in the given list of remaining rows to evolve. 'y' and
+;;; 'cells' are used to track state: 'y' tells us which row we are currently
+;;; processing, and 'cells' is the full 2D grid of cells we are evolving.
+(define (evolve-cell-rows remaining-rows y cells)
   (if (null? remaining-rows)
       null
-      (cons (evolve-cells-in-row 0 y cells (car remaining-rows))
-            (evolve-cell-rows (+ y 1) cells (cdr remaining-rows)))))
+      (cons (evolve-cells-in-row (car remaining-rows) 0 y cells)
+            (evolve-cell-rows (cdr remaining-rows) (+ y 1) cells))))
 
-(define (evolve-cells-in-row x y cells remaining-in-row)
+;;; Evolves each cell in the given row of cells to evolve. 'x', 'y' and 'cells'
+;;; are used to track state: 'x' and 'y' tells us which row and column we are
+;;; currently processing, and 'cells' is the full 2D grid of cells we are
+;;; evolving.
+(define (evolve-cells-in-row remaining-in-row x y cells)
   (if (null? remaining-in-row)
       null
       (cons (evolve-cell x y cells)
-            (evolve-cells-in-row (+ x 1) y cells (cdr remaining-in-row)))))
+            (evolve-cells-in-row (cdr remaining-in-row) (+ x 1) y cells))))
 
-;;; Decides if the given cell should live, given a 2D grid of its neighbors,
-;;; according to the following rules:
+;;; Decides if the given cell, in the context of the 2D grid it is in, should
+;;; live, according to the following rules:
 ;;;
 ;;; 1. Any live cell with fewer than two live neighbors dies, as if caused by
 ;;;    under-population.
