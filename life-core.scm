@@ -36,13 +36,14 @@
 ;;; 4. Any dead cell with exactly three live neighbors becomes a live cell, as
 ;;;    if by reproduction.
 (define (evolve-cell x y cells)
-  (let
-    ((cell (get-cell x y cells))
-     (live-neighbors (count-alive (get-neighbors x y cells))))
-    (if (= cell 1)
-        (if (or (= live-neighbors 2) (= live-neighbors 3)) 1 0)
-        (if (= live-neighbors 3) 1 0))))
+  (let ((cell (get-cell x y cells))
+        (live-neighbors (count-alive (get-neighbors x y cells))))
+       (if (= cell 1)
+           (if (or (= live-neighbors 2) (= live-neighbors 3)) 1 0)
+           (if (= live-neighbors 3) 1 0))))
 
+;;; Returns the cell at (x,y) in the given grid. If the requested cell is
+;;; outside the grid bounds, this just assumes that the cell is dead.
 (define (get-cell x y cells)
   (if (list? (car cells))
       ;; Find the correct row first
@@ -58,26 +59,26 @@
               (car cells)
               (get-cell (- x 1) y (cdr cells))))))
 
+;;; Returns a 2D list representing the neighbors of the cell at (x,y) in the
+;;; given grid.
 (define (get-neighbors x y cells)
-  (list
-    (list (get-cell (- x 1) (- y 1) cells)
-          (get-cell    x    (- y 1) cells)
-          (get-cell (+ x 1) (- y 1) cells))
-    (list (get-cell (- x 1)    y    cells)
-          (get-cell (+ x 1)    y    cells))
-    (list (get-cell (- x 1) (+ y 1) cells)
-          (get-cell    x    (+ y 1) cells)
-          (get-cell (+ x 1) (+ y 1) cells))))
+  (list (list (get-cell (- x 1) (- y 1) cells)
+              (get-cell    x    (- y 1) cells)
+              (get-cell (+ x 1) (- y 1) cells))
+        (list (get-cell (- x 1)    y    cells)
+              (get-cell (+ x 1)    y    cells))
+        (list (get-cell (- x 1) (+ y 1) cells)
+              (get-cell    x    (+ y 1) cells)
+              (get-cell (+ x 1) (+ y 1) cells))))
 
 ;;; Counts the number of living cells in the given list of cells. The list
 ;;; can either be one or multi-dimensional.
 (define (count-alive cells)
   (if (list? (car cells))
       ;; Recursive case: aggregate the number alive in each row
-      (foldr
-        (lambda (row count) (+ (count-alive row) count))
-        0
-        cells)
+      (foldr (lambda (row count) (+ (count-alive row) count))
+             0
+             cells)
       ;; Base case: count number alive in this row
       (length (filter (lambda (cell) (= cell 1)) cells))))
 
