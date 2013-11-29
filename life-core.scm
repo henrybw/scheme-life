@@ -22,7 +22,7 @@
             (evolve-cell-rows (cdr remaining-rows) (+ y 1) cells))))
 
 ;;; Evolves each cell in the given row of cells to evolve. 'x', 'y' and 'cells'
-;;; are used to track state: 'x' and 'y' tells us which row and column we are
+;;; are used to track state: 'x' and 'y' tell us which row and column we are
 ;;; currently processing, and 'cells' is the full 2D grid of cells we are
 ;;; evolving.
 (define (evolve-cells-in-row remaining-in-row x y cells)
