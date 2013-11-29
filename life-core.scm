@@ -10,7 +10,7 @@
 ;;; Evolves a generation according to the Game of Life rules. Returns the next
 ;;; generation as a 2D list of cells, with the same dimensions as the input list.
 (define (evolve cells)
-  (evolve-cell-rows 0 cells cells))
+  (evolve-cell-rows cells 0 cells))
 
 ;;; Evolves each row in the given list of remaining rows to evolve. 'y' and
 ;;; 'cells' are used to track state: 'y' tells us which row we are currently
